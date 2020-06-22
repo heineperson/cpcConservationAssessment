@@ -44,8 +44,8 @@ globallyRareCan <- as.data.table(rbind(g1CanResults, g2CanResults))
 # Filtering by just plants
 globallyRarePlants <- subset(globallyRareCan,grepl("Vascular Plants",speciesGlobal))
 
+# Merging on the CPC table
+globallyRarePlants <- merge(globallyRarePlants, cpc[,.(tblRareTaxonTable_In_National_Collection,NATURESERVE_ID = as.integer(tblRareTaxonTable_NATURESERVE_ID))],by.x="elementGlobalId",by.y="NATURESERVE_ID",all.x=T)
 
-# 
-
-write.csv(globallyRarePlants,"Data/globallyRarePlants_NatureServec.csv")
+write.csv(globallyRarePlants,"Data/globallyRarePlants_NatureServe.csv")
 
