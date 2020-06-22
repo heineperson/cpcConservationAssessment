@@ -1,18 +1,21 @@
+## Goal of Document: Get a list of the G1 & G2 species in Canada & join CPC National Collection species
+
+
 library(natserv)
 library(httr)
 library(data.table)
 library(stringr)
 
+
 # Readinging Caspio Code for Contacting API
 source("caspioFunctions.R")
 source("Tokens/caspioSource.R")
 
-## Reading in Datasets to Use
 # Read in CPC Rare Taxon Table
 cpc <- caspio_get_view_all("RareTaxonTblNoLists")
 
 
-## Getting G2 Values
+## Getting G2 Values from NaturServe API
 g2Can <- ns_search_comb(status="G2", location=list(nation="CA"),record_type="species",page=0,per_page=20)
 pageNum <- g2Can$resultsSummary$value[[3]]
 g2CanResults <- subset((g2Can$results),select=c(elementGlobalId,scientificName,primaryCommonName,roundedGRank,speciesGlobal))
