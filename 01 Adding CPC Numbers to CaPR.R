@@ -62,10 +62,15 @@ jepNeeds[name_minus_authors=="Boechera rigidissima var. demota",CPCNew:=8299]
 jepNeeds[name_minus_authors=="Clarkia mildrediae ssp. mildrediae",CPCNew:=8821]
 jepNeeds[name_minus_authors=="Lomatium ravenii var. ravenii",CPCNew:=2676]
 
-jepNeeds[!is.na(in_cpc) & is.na(CPCNew) ,CPCNew1:=.I+48107]
-
-
-
+## Assigned new CPC Numbers to blank ones Write out all of the new CPC taxa
+# jepNeeds[!is.na(in_cpc) & is.na(CPCNew) ,CPCNew1:=.I+48107]
+# write.csv(jepNeeds[!is.na(CPCNew1),.(CPCNew1,name_minus_authors,common,scientificNameAuthorship,NATURESERVE_ID)],"Data/NewCPCEntries.csv")
 
 # END GOAL - Creating a file that cleanly lists a CPCNumber for all JepIDs for species with rank 1B in CNPS rare plant inventory
+jepMerge <- merge(jep[,.(JepID,CPCNumber,name_minus_authors,needsCPCNum)], jepNeeds[,.(JepID,CPCNew)], by="JepID",all.x=T)
+jepMerge[,CPCNumber:=ifelse(is.na(CPCNumber) & !is.na(CPCNew), CPCNew,CPCNumber)]
+jepMerge[!is.na(CPCNumber),.(JepID,CPCNumber)]
+
+# Write out
+write.csv(jepMerge[!is.na(CPCNumber),.(JepID,CPCNumber)], "Data/JepIDswithCPCIDs.csv")
 
